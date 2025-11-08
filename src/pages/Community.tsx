@@ -19,7 +19,7 @@ interface Doubt {
   subject: string;
   status: string;
   created_at: string;
-  profiles?: { full_name: string } | null;
+  user_id: string;
 }
 
 const Community = () => {
@@ -39,13 +39,8 @@ const Community = () => {
   const fetchDoubts = async () => {
     const { data, error } = await supabase
       .from('doubts')
-      .select(`
-        *,
-        profiles:user_id (
-          full_name
-        )
-      `)
-      .order('created_at', { ascending: false });
+      .select('*')
+      .order('created_at', { ascending: false});
 
     if (error) {
       console.error('Error fetching doubts:', error);
@@ -178,7 +173,7 @@ const Community = () => {
                         {doubt.status}
                       </Badge>
                       <span className="text-sm text-muted-foreground">
-                        by {doubt.profiles?.full_name || 'Anonymous'}
+                        {new Date(doubt.created_at).toLocaleDateString()}
                       </span>
                     </div>
                   </div>

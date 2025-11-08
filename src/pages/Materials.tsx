@@ -20,7 +20,7 @@ interface Material {
   subject: string;
   downloads: number;
   created_at: string;
-  profiles?: { full_name: string } | null;
+  user_id: string;
 }
 
 const Materials = () => {
@@ -39,12 +39,7 @@ const Materials = () => {
   const fetchMaterials = async () => {
     const { data, error } = await supabase
       .from('materials')
-      .select(`
-        *,
-        profiles:user_id (
-          full_name
-        )
-      `)
+      .select('*')
       .order('created_at', { ascending: false });
 
     if (error) {
@@ -180,7 +175,7 @@ const Materials = () => {
                   {material.description}
                 </p>
                 <div className="flex items-center justify-between text-sm text-muted-foreground">
-                  <span>by {material.profiles?.full_name || 'Anonymous'}</span>
+                  <span>{new Date(material.created_at).toLocaleDateString()}</span>
                   <span>{material.downloads} downloads</span>
                 </div>
                 <Button 
