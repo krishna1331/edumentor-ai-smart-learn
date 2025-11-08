@@ -39,11 +39,17 @@ const Community = () => {
   const fetchDoubts = async () => {
     const { data, error } = await supabase
       .from('doubts')
-      .select('*')
+      .select(`
+        *,
+        profiles:user_id (
+          full_name
+        )
+      `)
       .order('created_at', { ascending: false });
 
     if (error) {
       console.error('Error fetching doubts:', error);
+      toast.error('Failed to load doubts');
       return;
     }
 

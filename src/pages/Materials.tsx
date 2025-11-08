@@ -39,11 +39,17 @@ const Materials = () => {
   const fetchMaterials = async () => {
     const { data, error } = await supabase
       .from('materials')
-      .select('*')
+      .select(`
+        *,
+        profiles:user_id (
+          full_name
+        )
+      `)
       .order('created_at', { ascending: false });
 
     if (error) {
       console.error('Error fetching materials:', error);
+      toast.error('Failed to load materials');
       return;
     }
 
